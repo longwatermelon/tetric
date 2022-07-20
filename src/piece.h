@@ -9,17 +9,16 @@ struct Piece
     struct Cube **cubes;
     size_t ncubes;
 
-    unsigned int vao, vb;
-
     float *verts;
     size_t nverts;
 };
 
-struct Piece *piece_alloc();
+// Piece takes ownership of cubes list
+struct Piece *piece_alloc(struct Cube **cubes, size_t ncubes);
 void piece_free(struct Piece *p);
 
 void piece_move(struct Piece *p, vec3 dir);
-void piece_render(struct Piece *p, RenderInfo *ri);
+float *piece_verts(struct Piece *p);
 
 #endif
 

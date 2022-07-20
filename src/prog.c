@@ -1,5 +1,5 @@
 #include "prog.h"
-#include "piece.h"
+#include "board.h"
 #include <stb/stb_image.h>
 #include <stdlib.h>
 
@@ -40,7 +40,7 @@ void prog_mainloop(struct Prog *p)
     double prev_mx, prev_my;
     glfwGetCursorPos(p->win, &prev_mx, &prev_my);
 
-    struct Piece *piece = piece_alloc();
+    struct Board *b = board_alloc();
 
     while (!glfwWindowShouldClose(p->win))
     {
@@ -64,11 +64,14 @@ void prog_mainloop(struct Prog *p)
         shader_mat4(p->ri->shader, "view", p->ri->view);
         shader_mat4(p->ri->shader, "projection", p->ri->proj);
 
-        piece_render(piece, p->ri);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        board_render(b, p->ri);
 
         glfwSwapBuffers(p->win);
         glfwPollEvents();
     }
+
+    board_free(b);
 }
 
 
