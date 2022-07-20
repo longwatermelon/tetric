@@ -2,6 +2,7 @@
 #include "shader.h"
 #include <string.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 
 struct Board *board_alloc()
@@ -14,9 +15,14 @@ struct Board *board_alloc()
 
     b->pieces = 0;
     b->npieces = 0;
+
+    b->active = 0;
+    b->last_moved = 0.f;
+
     b->verts = 0;
     b->nverts = 0;
 
+    board_make_borders(b);
     board_make_borders(b);
 
     glGenVertexArrays(1, &b->vao);
@@ -60,6 +66,27 @@ void board_free(struct Board *b)
 }
 
 
+void board_update(struct Board *b)
+{
+    if (!b->active)
+    {
+        struct Cube **cubes = malloc(sizeof(struct Cube*));
+        cubes[0] = cube_alloc((vec3){ 0.f, 20.f, 5.f }, (vec3){ 1.f, 0.f, 0.f });
+
+        b->active = piece_alloc(cubes, 1);
+        board_add_piece(b, b->active);
+
+        b->last_moved = glfwGetTime();
+    }
+
+    if (glfwGetTime() - b->last_moved > .5f)
+    {
+        b->last_moved = glfwGetTime();
+        piece_move(b->active, (vec3){ 0.f, -1.f, 0.f });
+    }
+}
+
+
 void board_render(struct Board *b, RenderInfo *ri)
 {
     board_fill_verts(b);
@@ -93,17 +120,6 @@ void board_fill_verts(struct Board *b)
     }
 }
 
-/* void piece_render(struct Piece *p, RenderInfo *ri) */
-/* { */
-/*     size_t index = 0; */
-
-/*     for (size_t i = 0; i < p->ncubes; ++i) */
-/*     { */
-/*         memcpy(p->verts + index, p->cubes[i]->verts, sizeof(p->cubes[i]->verts)); */
-/*         index += CUBE_VERTLEN * CUBE_NVERTS; */
-/*     } */
-
-/* } */
 
 void board_add_piece(struct Board *b, struct Piece *p)
 {
@@ -112,6 +128,10 @@ void board_add_piece(struct Board *b, struct Piece *p)
 
     b->nverts += p->nverts;
     b->verts = realloc(b->verts, sizeof(float) * b->nverts);
+
+    glBindBuffer(GL_ARRAY_BUFFER, b->vb);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * b->nverts, b->verts, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 
@@ -135,15 +155,6 @@ void board_make_borders(struct Board *b)
         b->layout[((10 * 20 - 1) - 10) + (i + 1)] = '#';
         cubes[index++] = cube_alloc((vec3){ 0.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
     }
-
-    /* for (size_t i = 0; i < 10 * 20; ++i) */
-    /* { */
-    /*     if (i % 10 == 0) putchar('\n'); */
-    /*     putchar(b->layout[i]); */
-    /* } */
-    /* putchar('\n'); */
-
-    /* printf("%s\n", b->layout); */
 
     struct Piece *p = piece_alloc(cubes, ncubes);
     board_add_piece(b, p);

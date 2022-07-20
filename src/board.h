@@ -11,6 +11,9 @@ struct Board
     struct Piece **pieces;
     size_t npieces;
 
+    struct Piece *active;
+    float last_moved;
+
     float *verts;
     size_t nverts;
 
@@ -19,6 +22,8 @@ struct Board
 
 struct Board *board_alloc();
 void board_free(struct Board *b);
+
+void board_update(struct Board *b);
 
 void board_render(struct Board *b, RenderInfo *ri);
 void board_fill_verts(struct Board *b);

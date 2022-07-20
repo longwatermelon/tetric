@@ -31,8 +31,8 @@ void prog_free(struct Prog *p)
 
 void prog_mainloop(struct Prog *p)
 {
-    /* glEnable(GL_DEPTH_TEST); */
-    /* glEnable(GL_CULL_FACE); */
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
     glfwSetCursorPos(p->win, 400.f, 300.f);
     glfwSetInputMode(p->win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -52,6 +52,8 @@ void prog_mainloop(struct Prog *p)
         prev_my = my;
 
         prog_events(p);
+
+        board_update(b);
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
