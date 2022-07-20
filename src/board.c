@@ -70,6 +70,7 @@ void board_render(struct Board *b, RenderInfo *ri)
 
     mat4 model;
     glm_mat4_identity(model);
+    glm_translate(model, (vec3){ 30.f, -10.f, -4.5f });
     shader_mat4(ri->shader, "model", model);
 
     glBindVertexArray(b->vao);
@@ -123,16 +124,16 @@ void board_make_borders(struct Board *b)
     for (size_t i = 0; i < 20; ++i)
     {
         b->layout[i * 10] = '#';
-        cubes[index++] = cube_alloc((vec3){ 10.f, i, 0.f }, (vec3){ 1.f, 1.f, 1.f });
+        cubes[index++] = cube_alloc((vec3){ 0.f, i, 0.f }, (vec3){ 1.f, 1.f, 1.f });
 
         b->layout[i * 10 + 9] = '#';
-        cubes[index++] = cube_alloc((vec3){ 10.f, i, 9.f }, (vec3){ 1.f, 1.f, 1.f });
+        cubes[index++] = cube_alloc((vec3){ 0.f, i, 9.f }, (vec3){ 1.f, 1.f, 1.f });
     }
 
     for (size_t i = 0; i < 9; ++i)
     {
         b->layout[((10 * 20 - 1) - 10) + (i + 1)] = '#';
-        cubes[index++] = cube_alloc((vec3){ 10.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
+        cubes[index++] = cube_alloc((vec3){ 0.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
     }
 
     /* for (size_t i = 0; i < 10 * 20; ++i) */

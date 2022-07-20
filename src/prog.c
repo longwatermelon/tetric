@@ -64,7 +64,7 @@ void prog_mainloop(struct Prog *p)
         shader_mat4(p->ri->shader, "view", p->ri->view);
         shader_mat4(p->ri->shader, "projection", p->ri->proj);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
         board_render(b, p->ri);
 
         glfwSwapBuffers(p->win);
