@@ -1,3 +1,3 @@
-# gl-template
+# tetric
+Tetris with better graphics
 
-Template for future opengl projects with custom meshes
