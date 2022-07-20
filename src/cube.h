@@ -4,7 +4,7 @@
 #include <cglm/cglm.h>
 
 #define CUBE_NVERTS 36
-#define CUBE_VERTLEN 6
+#define CUBE_VERTLEN 9
 
 struct Cube
 {

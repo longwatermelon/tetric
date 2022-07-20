@@ -11,7 +11,7 @@ struct Piece *piece_alloc()
     p->ncubes = 1;
     p->cubes = malloc(sizeof(struct Cube*) * p->ncubes);
 
-    p->cubes[0] = cube_alloc((vec3){ 5.f, 0.f, 0.f }, (vec3){ 0.f, 0.f, 0.f });
+    p->cubes[0] = cube_alloc((vec3){ 5.f, 0.f, 0.f }, (vec3){ 1.f, 0.f, 0.f });
 
     p->nverts = p->ncubes * CUBE_VERTLEN * CUBE_NVERTS;
     p->verts = malloc(sizeof(float) * p->nverts);
@@ -24,12 +24,16 @@ struct Piece *piece_alloc()
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * p->nverts, p->verts, GL_DYNAMIC_DRAW);
 
     // verts
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, CUBE_VERTLEN * sizeof(float), 0);
     glEnableVertexAttribArray(0);
 
     // norms
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float) * 3));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, CUBE_VERTLEN * sizeof(float), (void*)(sizeof(float) * 3));
     glEnableVertexAttribArray(1);
+
+    // colors
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, CUBE_VERTLEN * sizeof(float), (void*)(sizeof(float) * 6));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
