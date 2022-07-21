@@ -91,6 +91,8 @@ void prog_events(struct Prog *p)
     if (glfwGetKey(p->win, GLFW_KEY_RIGHT) == GLFW_PRESS)
         board_move_active(p->board, (vec3){ 0.f, 0.f, 1.f });
 
+    if (glfwGetKey(p->win, GLFW_KEY_DOWN) == GLFW_PRESS)
+        board_move_active(p->board, (vec3){ 0.f, -1.f, 0.f });
 
     /* float move = .05f; */
 

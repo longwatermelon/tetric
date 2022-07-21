@@ -158,6 +158,9 @@ void board_place_active(struct Board *b)
 
 void board_move_active(struct Board *b, vec3 dir)
 {
+    if (!b->active)
+        return;
+
     piece_move(b->active, dir);
 
     if (board_check_collision(b))
