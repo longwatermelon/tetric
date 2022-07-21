@@ -79,8 +79,6 @@ void prog_mainloop(struct Prog *p)
         prev_mx = mx;
         prev_my = my;
 
-        prog_events(p);
-
         board_update(p->board);
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -100,35 +98,5 @@ void prog_mainloop(struct Prog *p)
         glfwSwapBuffers(p->win);
         glfwPollEvents();
     }
-}
-
-
-void prog_events(struct Prog *p)
-{
-    static float last_key = 0.f;
-
-    if (glfwGetTime() - last_key < .1f)
-        return;
-
-    last_key = glfwGetTime();
-
-
-    /* float move = .05f; */
-
-    /* vec3 front; */
-    /* glm_vec3_scale(p->cam->front, move, front); */
-    /* front[1] = 0.f; */
-
-    /* vec3 right; */
-    /* glm_vec3_scale(p->cam->right, move, right); */
-    /* right[1] = 0.f; */
-
-    /* if (glfwGetKey(p->win, GLFW_KEY_W) == GLFW_PRESS) glm_vec3_add(p->cam->pos, front, p->cam->pos); */
-    /* if (glfwGetKey(p->win, GLFW_KEY_S) == GLFW_PRESS) glm_vec3_sub(p->cam->pos, front, p->cam->pos); */
-    /* if (glfwGetKey(p->win, GLFW_KEY_A) == GLFW_PRESS) glm_vec3_sub(p->cam->pos, right, p->cam->pos); */
-    /* if (glfwGetKey(p->win, GLFW_KEY_D) == GLFW_PRESS) glm_vec3_add(p->cam->pos, right, p->cam->pos); */
-
-    /* if (glfwGetKey(p->win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) p->cam->pos[1] -= move; */
-    /* if (glfwGetKey(p->win, GLFW_KEY_SPACE) == GLFW_PRESS) p->cam->pos[1] += move; */
 }
 

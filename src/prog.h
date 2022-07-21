@@ -21,7 +21,5 @@ void prog_free(struct Prog *p);
 
 void prog_mainloop(struct Prog *p);
 
-void prog_events(struct Prog *p);
-
 #endif
 

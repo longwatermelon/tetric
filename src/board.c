@@ -248,7 +248,7 @@ void board_clear_full_lines(struct Board *b)
                     b->layout[i * 10 + z] = '.';
                     // @ indicates newly moved piece so it doesn't get
                     // cleared by another piece moving out of that position
-                    b->layout[i * 10 + 10 + z] = '@';
+                    b->layout[i * 10 + 10 * cleared + z] = '@';
                 }
             }
         }
