@@ -41,7 +41,7 @@ void main()
 
     vec3 result = ambient + diffuse + specular;
 
-    float ratio = 1. / 1.4;
+    float ratio = 1. / 1.1;
     vec3 I = normalize(new_pos - cam_pos);
     vec3 R = refract(I, normalize(f_norm), ratio);
 
