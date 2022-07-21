@@ -3,6 +3,30 @@
 #include <stb/stb_image.h>
 #include <stdlib.h>
 
+struct Prog *g_prog;
+
+#define GLFW_REPEAT 2
+
+static void key_callback(GLFWwindow *win, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+        board_move_active(g_prog->board, (vec3){ 0.f, 0.f, -1.f });
+
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+        board_move_active(g_prog->board, (vec3){ 0.f, 0.f, 1.f });
+
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+        board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f });
+
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS && g_prog->board->active)
+        piece_rotate(g_prog->board->active);
+
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        while (board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f }))
+            ;
+    }
+}
 
 struct Prog *prog_alloc(GLFWwindow *win)
 {
@@ -20,6 +44,7 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
     p->board = board_alloc();
 
+    g_prog = p;
     return p;
 }
 
@@ -34,6 +59,8 @@ void prog_free(struct Prog *p)
 
 void prog_mainloop(struct Prog *p)
 {
+    glfwSetKeyCallback(p->win, key_callback);
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
@@ -85,17 +112,6 @@ void prog_events(struct Prog *p)
 
     last_key = glfwGetTime();
 
-    if (glfwGetKey(p->win, GLFW_KEY_LEFT) == GLFW_PRESS)
-        board_move_active(p->board, (vec3){ 0.f, 0.f, -1.f });
-
-    if (glfwGetKey(p->win, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        board_move_active(p->board, (vec3){ 0.f, 0.f, 1.f });
-
-    if (glfwGetKey(p->win, GLFW_KEY_DOWN) == GLFW_PRESS)
-        board_move_active(p->board, (vec3){ 0.f, -1.f, 0.f });
-
-    if (glfwGetKey(p->win, GLFW_KEY_UP) == GLFW_PRESS && p->board->active)
-        piece_rotate(p->board->active);
 
     /* float move = .05f; */
 

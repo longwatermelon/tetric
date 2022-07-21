@@ -155,10 +155,10 @@ void board_place_active(struct Board *b)
 }
 
 
-void board_move_active(struct Board *b, vec3 dir)
+bool board_move_active(struct Board *b, vec3 dir)
 {
     if (!b->active)
-        return;
+        return false;
 
     piece_move(b->active, dir);
 
@@ -167,7 +167,11 @@ void board_move_active(struct Board *b, vec3 dir)
         vec3 back;
         glm_vec3_negate_to(dir, back);
         piece_move(b->active, back);
+
+        return false;
     }
+
+    return true;
 }
 
 
