@@ -32,6 +32,8 @@ void board_fill_verts(struct Board *b);
 bool board_check_collision(struct Board *b);
 // Modify b->layout to # where b->active currently is
 void board_place_active(struct Board *b);
+// Move active block and check for collisions
+void board_move_active(struct Board *b, vec3 dir);
 
 void board_add_piece(struct Board *b, struct Piece *p);
 

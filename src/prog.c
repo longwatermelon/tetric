@@ -18,12 +18,15 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
     stbi_set_flip_vertically_on_load(true);
 
+    p->board = board_alloc();
+
     return p;
 }
 
 
 void prog_free(struct Prog *p)
 {
+    board_free(p->board);
     cam_free(p->cam);
     free(p);
 }
@@ -40,8 +43,6 @@ void prog_mainloop(struct Prog *p)
     double prev_mx, prev_my;
     glfwGetCursorPos(p->win, &prev_mx, &prev_my);
 
-    struct Board *b = board_alloc();
-
     while (!glfwWindowShouldClose(p->win))
     {
         double mx, my;
@@ -53,7 +54,7 @@ void prog_mainloop(struct Prog *p)
 
         prog_events(p);
 
-        board_update(b);
+        board_update(p->board);
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -67,34 +68,35 @@ void prog_mainloop(struct Prog *p)
         shader_mat4(p->ri->shader, "projection", p->ri->proj);
 
         /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
-        board_render(b, p->ri);
+        board_render(p->board, p->ri);
 
         glfwSwapBuffers(p->win);
         glfwPollEvents();
     }
-
-    board_free(b);
 }
 
 
 void prog_events(struct Prog *p)
 {
-    float move = .05f;
+    if (glfwGetKey(p->win, GLFW_KEY_LEFT) == GLFW_PRESS)
+        board_move_active(p->board, (vec3){ 0.f, 0.f, -1.f });
 
-    vec3 front;
-    glm_vec3_scale(p->cam->front, move, front);
-    front[1] = 0.f;
+    /* float move = .05f; */
 
-    vec3 right;
-    glm_vec3_scale(p->cam->right, move, right);
-    right[1] = 0.f;
+    /* vec3 front; */
+    /* glm_vec3_scale(p->cam->front, move, front); */
+    /* front[1] = 0.f; */
 
-    if (glfwGetKey(p->win, GLFW_KEY_W) == GLFW_PRESS) glm_vec3_add(p->cam->pos, front, p->cam->pos);
-    if (glfwGetKey(p->win, GLFW_KEY_S) == GLFW_PRESS) glm_vec3_sub(p->cam->pos, front, p->cam->pos);
-    if (glfwGetKey(p->win, GLFW_KEY_A) == GLFW_PRESS) glm_vec3_sub(p->cam->pos, right, p->cam->pos);
-    if (glfwGetKey(p->win, GLFW_KEY_D) == GLFW_PRESS) glm_vec3_add(p->cam->pos, right, p->cam->pos);
+    /* vec3 right; */
+    /* glm_vec3_scale(p->cam->right, move, right); */
+    /* right[1] = 0.f; */
 
-    if (glfwGetKey(p->win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) p->cam->pos[1] -= move;
-    if (glfwGetKey(p->win, GLFW_KEY_SPACE) == GLFW_PRESS) p->cam->pos[1] += move;
+    /* if (glfwGetKey(p->win, GLFW_KEY_W) == GLFW_PRESS) glm_vec3_add(p->cam->pos, front, p->cam->pos); */
+    /* if (glfwGetKey(p->win, GLFW_KEY_S) == GLFW_PRESS) glm_vec3_sub(p->cam->pos, front, p->cam->pos); */
+    /* if (glfwGetKey(p->win, GLFW_KEY_A) == GLFW_PRESS) glm_vec3_sub(p->cam->pos, right, p->cam->pos); */
+    /* if (glfwGetKey(p->win, GLFW_KEY_D) == GLFW_PRESS) glm_vec3_add(p->cam->pos, right, p->cam->pos); */
+
+    /* if (glfwGetKey(p->win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) p->cam->pos[1] -= move; */
+    /* if (glfwGetKey(p->win, GLFW_KEY_SPACE) == GLFW_PRESS) p->cam->pos[1] += move; */
 }
 

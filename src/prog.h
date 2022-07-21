@@ -12,6 +12,8 @@ struct Prog
     RenderInfo *ri;
 
     struct Camera *cam;
+
+    struct Board *board;
 };
 
 struct Prog *prog_alloc(GLFWwindow *win);

@@ -22,15 +22,12 @@ struct Board *board_alloc()
     b->verts = 0;
     b->nverts = 0;
 
-    board_make_borders(b);
-    board_make_borders(b);
-
     glGenVertexArrays(1, &b->vao);
     glBindVertexArray(b->vao);
 
     glGenBuffers(1, &b->vb);
     glBindBuffer(GL_ARRAY_BUFFER, b->vb);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * b->nverts, b->verts, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 0, 0, GL_DYNAMIC_DRAW);
 
     // verts
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, CUBE_VERTLEN * sizeof(float), 0);
@@ -47,14 +44,14 @@ struct Board *board_alloc()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    board_make_borders(b);
+
     return b;
 }
 
 
 void board_free(struct Board *b)
 {
-    free(b->layout);
-
     for (size_t i = 0; i < b->npieces; ++i)
         piece_free(b->pieces[i]);
 
@@ -62,6 +59,8 @@ void board_free(struct Board *b)
 
     glDeleteVertexArrays(1, &b->vao);
     glDeleteBuffers(1, &b->vb);
+
+    free(b->layout);
     free(b);
 }
 
@@ -157,6 +156,19 @@ void board_place_active(struct Board *b)
 }
 
 
+void board_move_active(struct Board *b, vec3 dir)
+{
+    piece_move(b->active, dir);
+
+    if (board_check_collision(b))
+    {
+        vec3 back;
+        glm_vec3_negate_to(dir, back);
+        piece_move(b->active, back);
+    }
+}
+
+
 void board_add_piece(struct Board *b, struct Piece *p)
 {
     b->pieces = realloc(b->pieces, sizeof(struct Piece*) * ++b->npieces);
@@ -166,7 +178,7 @@ void board_add_piece(struct Board *b, struct Piece *p)
     b->verts = realloc(b->verts, sizeof(float) * b->nverts);
 
     glBindBuffer(GL_ARRAY_BUFFER, b->vb);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * b->nverts, b->verts, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * b->nverts, 0, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -186,7 +198,7 @@ void board_make_borders(struct Board *b)
         cubes[index++] = cube_alloc((vec3){ 0.f, i, 9.f }, (vec3){ 1.f, 1.f, 1.f });
     }
 
-    for (size_t i = 0; i < 9; ++i)
+    for (size_t i = 0; i < 8; ++i)
     {
         b->layout[((10 * 20 - 1) - 10) + (i + 1)] = '#';
         cubes[index++] = cube_alloc((vec3){ 0.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
