@@ -71,6 +71,9 @@ void board_free(struct Board *b)
 
 void board_update(struct Board *b)
 {
+    for (size_t i = 0; i < b->npieces; ++i)
+        piece_update(b->pieces[i]);
+
     if (!b->active)
     {
         b->active = board_spawn_piece(b);
@@ -86,6 +89,8 @@ void board_update(struct Board *b)
         {
             piece_move(b->active, (vec3){ 0.f, 1.f, 0.f });
             board_place_active(b);
+
+            piece_flash(b->active);
             b->active = 0;
 
             board_clear_full_lines(b);

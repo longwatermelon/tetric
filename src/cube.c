@@ -94,3 +94,16 @@ void cube_move(struct Cube *c, vec3 dir)
     }
 }
 
+
+void cube_set_col(struct Cube *c, vec3 col)
+{
+    glm_vec3_copy(col, c->col);
+
+    for (size_t i = 0; i < CUBE_NVERTS * CUBE_VERTLEN; i += CUBE_VERTLEN)
+    {
+        c->verts[i + 6] = col[0];
+        c->verts[i + 7] = col[1];
+        c->verts[i + 8] = col[2];
+    }
+}
+

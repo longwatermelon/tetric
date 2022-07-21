@@ -24,6 +24,8 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
     {
         while (board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f }))
             ;
+
+        g_prog->board->last_moved = glfwGetTime() - .5f;
     }
 
     if (key == GLFW_KEY_R && action == GLFW_PRESS)

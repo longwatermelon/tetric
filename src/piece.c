@@ -14,6 +14,8 @@ struct Piece *piece_alloc(struct Cube **cubes, size_t ncubes)
     p->nverts = p->ncubes * CUBE_VERTLEN * CUBE_NVERTS;
     p->verts = malloc(sizeof(float) * p->nverts);
 
+    glm_vec3_copy(p->cubes[0]->col, p->col);
+
     return p;
 }
 
@@ -25,6 +27,17 @@ void piece_free(struct Piece *p)
 
     free(p->cubes);
     free(p);
+}
+
+
+void piece_update(struct Piece *p)
+{
+    vec3 diff;
+    glm_vec3_sub(p->col, p->cubes[0]->col, diff);
+    glm_vec3_scale(diff, 1.f / 5.f, diff);
+    glm_vec3_add(p->cubes[0]->col, diff, diff);
+
+    piece_set_col(p, diff);
 }
 
 
@@ -51,6 +64,19 @@ void piece_rotate(struct Piece *p)
             (-dy + center[2]) - p->cubes[i]->pos[2],
         });
     }
+}
+
+
+void piece_flash(struct Piece *p)
+{
+    piece_set_col(p, (vec3){ 1.f, 1.f, 1.f });
+}
+
+
+void piece_set_col(struct Piece *p, vec3 col)
+{
+    for (size_t i = 0; i < p->ncubes; ++i)
+        cube_set_col(p->cubes[i], col);
 }
 
 

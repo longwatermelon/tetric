@@ -17,6 +17,7 @@ struct Cube *cube_alloc(vec3 pos, vec3 col);
 void cube_free(struct Cube *c);
 
 void cube_move(struct Cube *c, vec3 dir);
+void cube_set_col(struct Cube *c, vec3 col);
 
 #endif
 
