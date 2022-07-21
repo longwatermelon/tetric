@@ -78,8 +78,19 @@ void prog_mainloop(struct Prog *p)
 
 void prog_events(struct Prog *p)
 {
+    static float last_key = 0.f;
+
+    if (glfwGetTime() - last_key < .05f)
+        return;
+
+    last_key = glfwGetTime();
+
     if (glfwGetKey(p->win, GLFW_KEY_LEFT) == GLFW_PRESS)
         board_move_active(p->board, (vec3){ 0.f, 0.f, -1.f });
+
+    if (glfwGetKey(p->win, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        board_move_active(p->board, (vec3){ 0.f, 0.f, 1.f });
+
 
     /* float move = .05f; */
 

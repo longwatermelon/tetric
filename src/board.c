@@ -200,9 +200,17 @@ void board_make_borders(struct Board *b)
 
     for (size_t i = 0; i < 8; ++i)
     {
-        b->layout[((10 * 20 - 1) - 10) + (i + 1)] = '#';
+        b->layout[((10 * 20 - 1) - 10) + (i + 2)] = '#';
         cubes[index++] = cube_alloc((vec3){ 0.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
     }
+
+    /* for (size_t i = 0; i < 10 * 20; ++i) */
+    /* { */
+    /*     if (i % 10 == 0) putchar('\n'); */
+    /*     putchar(b->layout[i]); */
+    /* } */
+
+    /* putchar('\n'); */
 
     struct Piece *p = piece_alloc(cubes, ncubes);
     board_add_piece(b, p);
