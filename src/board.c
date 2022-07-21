@@ -278,11 +278,110 @@ void board_add_piece(struct Board *b, struct Piece *p)
 
 struct Piece *board_spawn_piece(struct Board *b)
 {
+    int type = rand() % 7;
     struct Cube **cubes = malloc(sizeof(struct Cube*) * 4);
-    cubes[0] = cube_alloc((vec3){ 0.f, 19.f, 5.f }, (vec3){ 1.f, 1.f, 0.f });
-    cubes[1] = cube_alloc((vec3){ 0.f, 18.f, 5.f }, (vec3){ 1.f, 1.f, 0.f });
-    cubes[2] = cube_alloc((vec3){ 0.f, 17.f, 5.f }, (vec3){ 1.f, 1.f, 0.f });
-    cubes[3] = cube_alloc((vec3){ 0.f, 17.f, 6.f }, (vec3){ 1.f, 1.f, 0.f });
+
+    switch (type)
+    {
+    case 0: // bar
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 3.f },
+            { 0.f, 19.f, 4.f },
+            { 0.f, 19.f, 5.f },
+            { 0.f, 19.f, 6.f }
+        };
+
+        vec3 col = { 75.f / 255.f, 242.f / 255.f, 231.f / 255.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    case 1: // square
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 4.f },
+            { 0.f, 19.f, 5.f },
+            { 0.f, 18.f, 5.f },
+            { 0.f, 18.f, 4.f }
+        };
+
+        vec3 col = { 1.f, 1.f, 0.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    case 2: // left squiggle
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 4.f },
+            { 0.f, 18.f, 4.f },
+            { 0.f, 18.f, 5.f },
+            { 0.f, 17.f, 5.f }
+        };
+
+        vec3 col = { 1.f, 100.f / 255.f, 100.f / 255.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    case 3:
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 5.f },
+            { 0.f, 18.f, 5.f },
+            { 0.f, 18.f, 4.f },
+            { 0.f, 17.f, 4.f }
+        };
+
+        vec3 col = { 1.f, 178.f / 255.f, 102.f / 255.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    case 4:
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 4.f },
+            { 0.f, 18.f, 4.f },
+            { 0.f, 17.f, 4.f },
+            { 0.f, 17.f, 5.f }
+        };
+
+        vec3 col = { 1.f, 178.f / 255.f, 102.f / 255.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    case 5:
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 5.f },
+            { 0.f, 18.f, 5.f },
+            { 0.f, 17.f, 5.f },
+            { 0.f, 17.f, 4.f }
+        };
+
+        vec3 col = { 102.f / 255.f, 178.f / 255.f, 1.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    case 6:
+    {
+        vec3 pos[4] = {
+            { 0.f, 19.f, 5.f },
+            { 0.f, 18.f, 5.f },
+            { 0.f, 18.f, 4.f },
+            { 0.f, 18.f, 6.f }
+        };
+
+        vec3 col = { 1.f, 153.f / 255.f, 1.f };
+
+        for (int i = 0; i < 4; ++i)
+            cubes[i] = cube_alloc(pos[i], col);
+    } break;
+    }
 
     struct Piece *p = piece_alloc(cubes, 4);
     board_add_piece(b, p);
