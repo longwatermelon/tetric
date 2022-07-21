@@ -12,7 +12,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    GLFWwindow *win = glfwCreateWindow(1200, 900, "Opengl", 0, 0);
+    GLFWwindow *win = glfwCreateWindow(1200, 900, "Tetris", 0, 0);
     glfwMakeContextCurrent(win);
 
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
