@@ -88,6 +88,8 @@ void board_update(struct Board *b)
             piece_move(b->active, (vec3){ 0.f, 1.f, 0.f });
             board_place_active(b);
             b->active = 0;
+
+            board_clear_full_lines(b);
         }
     }
 }
@@ -95,7 +97,7 @@ void board_update(struct Board *b)
 
 void board_render(struct Board *b, RenderInfo *ri)
 {
-    board_fill_verts(b);
+    size_t len = board_fill_verts(b);
 
     glBindBuffer(GL_ARRAY_BUFFER, b->vb);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * b->nverts, b->verts);
@@ -107,23 +109,25 @@ void board_render(struct Board *b, RenderInfo *ri)
     shader_mat4(ri->shader, "model", model);
 
     glBindVertexArray(b->vao);
-    glDrawArrays(GL_TRIANGLES, 0, b->nverts / CUBE_VERTLEN);
+    glDrawArrays(GL_TRIANGLES, 0, len / CUBE_VERTLEN);
     glBindVertexArray(0);
 }
 
 
-void board_fill_verts(struct Board *b)
+size_t board_fill_verts(struct Board *b)
 {
     size_t index = 0;
 
     for (size_t i = 0; i < b->npieces; ++i)
     {
-        size_t nverts = b->pieces[i]->nverts;
-        float *pverts = piece_verts(b->pieces[i]);
+        size_t len;
+        float *pverts = piece_verts(b->pieces[i], &len);
 
-        memcpy(b->verts + index, pverts, sizeof(float) * nverts);
-        index += nverts;
+        memcpy(b->verts + index, pverts, sizeof(float) * len);
+        index += len;
     }
+
+    return index;
 }
 
 
@@ -168,6 +172,84 @@ void board_move_active(struct Board *b, vec3 dir)
         vec3 back;
         glm_vec3_negate_to(dir, back);
         piece_move(b->active, back);
+    }
+}
+
+
+void board_clear_full_lines(struct Board *b)
+{
+    int cleared = 0;
+    int lowest = 20;
+
+    for (size_t i = 0; i < 19; ++i)
+    {
+        size_t begin = i * 10;
+        bool full = true;
+
+        for (size_t z = begin + 1; z <= begin + 8; ++z)
+        {
+            if (b->layout[z] != '#')
+            {
+                full = false;
+                break;
+            }
+        }
+
+        if (full)
+        {
+            ++cleared;
+            int iy = i;
+
+            for (size_t z = begin + 1; z <= begin + 8; ++z)
+            {
+                int iz = z - begin;
+
+                for (size_t i = 0; i < b->npieces; ++i)
+                {
+                    for (size_t j = 0; j < b->pieces[i]->ncubes; ++j)
+                    {
+                        struct Cube *c = b->pieces[i]->cubes[j];
+                        int ciy = 19.f - c->pos[1];
+                        int ciz = c->pos[2];
+
+                        if (ciy == iy && ciz == iz)
+                            b->pieces[i]->cubes[j]->render = false;
+                    }
+                }
+
+                b->layout[z] = '.';
+            }
+
+            if (iy < lowest)
+                lowest = iy;
+        }
+    }
+
+    if (cleared)
+    {
+        // Start from i = 1 to ignore border pieces
+        for (size_t i = 1; i < b->npieces; ++i)
+            piece_move(b->pieces[i], (vec3){ 0.f, -1.f * cleared, 0.f });
+
+        for (int i = lowest - 1; i >= 0; --i)
+        {
+            for (size_t z = 1; z <= 8; ++z)
+            {
+                if (b->layout[i * 10 + z] == '#')
+                {
+                    b->layout[i * 10 + z] = '.';
+                    // @ indicates newly moved piece so it doesn't get
+                    // cleared by another piece moving out of that position
+                    b->layout[i * 10 + 10 + z] = '@';
+                }
+            }
+        }
+
+        for (size_t i = 0; i < strlen(b->layout); ++i)
+        {
+            if (b->layout[i] == '@')
+                b->layout[i] = '#';
+        }
     }
 }
 

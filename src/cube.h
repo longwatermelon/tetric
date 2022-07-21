@@ -9,8 +9,8 @@
 struct Cube
 {
     vec3 pos, col;
-
     float verts[CUBE_NVERTS * CUBE_VERTLEN];
+    bool render;
 };
 
 struct Cube *cube_alloc(vec3 pos, vec3 col);

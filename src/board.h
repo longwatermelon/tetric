@@ -26,7 +26,7 @@ void board_free(struct Board *b);
 void board_update(struct Board *b);
 
 void board_render(struct Board *b, RenderInfo *ri);
-void board_fill_verts(struct Board *b);
+size_t board_fill_verts(struct Board *b);
 
 // Check when active piece has landed
 bool board_check_collision(struct Board *b);
@@ -34,6 +34,7 @@ bool board_check_collision(struct Board *b);
 void board_place_active(struct Board *b);
 // Move active block and check for collisions
 void board_move_active(struct Board *b, vec3 dir);
+void board_clear_full_lines(struct Board *b);
 
 void board_add_piece(struct Board *b, struct Piece *p);
 

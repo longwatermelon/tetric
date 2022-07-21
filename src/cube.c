@@ -51,6 +51,8 @@ static float g_verts[] = {
 struct Cube *cube_alloc(vec3 pos, vec3 col)
 {
     struct Cube *c = malloc(sizeof(struct Cube));
+    c->render = true;
+
     glm_vec3_zero(c->pos);
     glm_vec3_copy(col, c->col);
 

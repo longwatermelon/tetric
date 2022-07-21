@@ -35,16 +35,20 @@ void piece_move(struct Piece *p, vec3 dir)
 }
 
 
-float *piece_verts(struct Piece *p)
+float *piece_verts(struct Piece *p, size_t *len)
 {
     size_t index = 0;
 
     for (size_t i = 0; i < p->ncubes; ++i)
     {
+        if (!p->cubes[i]->render)
+            continue;
+
         memcpy(p->verts + index, p->cubes[i]->verts, sizeof(p->cubes[i]->verts));
         index += CUBE_VERTLEN * CUBE_NVERTS;
     }
 
+    *len = index;
     return p->verts;
 }
 
