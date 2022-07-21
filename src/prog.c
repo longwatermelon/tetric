@@ -82,6 +82,7 @@ void prog_mainloop(struct Prog *p)
         prev_my = my;
 
         board_update(p->board);
+        prog_rotate_cam(p);
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -104,5 +105,26 @@ void prog_mainloop(struct Prog *p)
         glfwSwapBuffers(p->win);
         glfwPollEvents();
     }
+}
+
+
+void prog_rotate_cam(struct Prog *p)
+{
+    float angle = .06f;
+    vec3 center = { 30.f, 0.f, 0.f };
+    float dist = glm_vec3_distance(p->cam->pos, center);
+
+    cam_rot(p->cam, (vec3){ 0.f, 0.f, angle / 2.f });
+
+    vec3 move;
+    glm_vec3_scale(p->cam->right, 2.f * dist * sinf(angle / 2.f), move);
+
+    glm_vec3_add(p->cam->pos, move, p->cam->pos);
+    cam_rot(p->cam, (vec3){ 0.f, 0.f, angle / 2.f });
+
+    vec3 back;
+    glm_vec3_negate_to(p->cam->front, back);
+    glm_vec3_scale(back, 30.f, back);
+    glm_vec3_add(center, back, p->cam->pos);
 }
 
