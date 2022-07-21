@@ -32,7 +32,7 @@ void main()
 
     vec3 ldir = normalize(vec3(-1., .2, .0));
     float diff = max(dot(norm, ldir), 0.);
-    vec3 diffuse = .7 * diff * f_col;
+    vec3 diffuse = 1. * diff * f_col;
 
     vec3 view_dir = normalize(cam_pos - new_pos);
     vec3 reflect_dir = reflect(-ldir, norm);
