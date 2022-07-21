@@ -4,7 +4,6 @@ out vec4 FragColor;
 in vec3 f_pos;
 in vec3 f_norm;
 in vec3 f_col;
-in vec2 f_tcoords;
 
 uniform vec3 cam_pos;
 uniform samplerCube skybox;
