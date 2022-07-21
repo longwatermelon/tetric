@@ -48,6 +48,11 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
         g_prog->restart = true;
         g_prog->running = false;
     }
+
+    if (key == GLFW_KEY_C && action == GLFW_PRESS)
+    {
+        board_swap_hold(g_prog->board);
+    }
 }
 
 struct Prog *prog_alloc(GLFWwindow *win)

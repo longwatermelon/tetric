@@ -12,12 +12,15 @@ struct Board
     size_t npieces;
 
     struct Piece *active;
+    struct Piece *hold;
     float last_moved;
 
     float *verts;
     size_t nverts;
 
     unsigned int vao, vb;
+
+    bool can_hold;
 };
 
 struct Board *board_alloc();
@@ -39,6 +42,8 @@ void board_clear_full_lines(struct Board *b);
 
 void board_add_piece(struct Board *b, struct Piece *p);
 struct Piece *board_spawn_piece(struct Board *b);
+
+void board_swap_hold(struct Board *b);
 
 void board_make_borders(struct Board *b);
 

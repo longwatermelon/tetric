@@ -17,6 +17,8 @@ struct Board *board_alloc()
     b->npieces = 0;
 
     b->active = 0;
+    b->hold = 0;
+    b->can_hold = true;
     b->last_moved = 0.f;
 
     b->verts = 0;
@@ -94,6 +96,8 @@ void board_update(struct Board *b)
             b->active = 0;
 
             board_clear_full_lines(b);
+
+            b->can_hold = true;
         }
     }
 }
@@ -238,6 +242,9 @@ void board_clear_full_lines(struct Board *b)
         // Start from i = 1 to ignore border pieces
         for (size_t i = 1; i < b->npieces; ++i)
         {
+            if (b->pieces[i] == b->hold)
+                continue;
+
             for (size_t j = 0; j < b->pieces[i]->ncubes; ++j)
             {
                 struct Cube *c = b->pieces[i]->cubes[j];
@@ -396,6 +403,33 @@ struct Piece *board_spawn_piece(struct Board *b)
     board_add_piece(b, p);
 
     return p;
+}
+
+
+void board_swap_hold(struct Board *b)
+{
+    if (b->can_hold)
+    {
+        struct Piece *tmp = b->hold;
+        b->hold = b->active;
+        b->active = tmp;
+
+        vec3 diff;
+
+        if (b->active)
+        {
+            glm_vec3_sub((vec3){ 0.f, 19.f, 5.f }, b->active->cubes[0]->pos, diff);
+            piece_move(b->active, diff);
+        }
+
+        if (b->hold)
+        {
+            glm_vec3_sub((vec3){ 0.f, 17.f, -4.f }, b->hold->cubes[1]->pos, diff);
+            piece_move(b->hold, diff);
+        }
+
+        b->can_hold = false;
+    }
 }
 
 
