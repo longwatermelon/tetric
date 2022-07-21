@@ -96,8 +96,9 @@ void prog_mainloop(struct Prog *p)
 
         shader_mat4(p->ri->shader, "view", p->ri->view);
         shader_mat4(p->ri->shader, "projection", p->ri->proj);
+        shader_vec3(p->ri->shader, "cam_pos", p->ri->cam->pos);
 
-        /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
+        glBindTexture(GL_TEXTURE_CUBE_MAP, p->skybox->tex);
         board_render(p->board, p->ri);
 
         glfwSwapBuffers(p->win);

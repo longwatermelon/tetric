@@ -5,8 +5,14 @@ in vec3 f_pos;
 in vec3 f_norm;
 in vec3 f_col;
 
+uniform vec3 cam_pos;
+uniform samplerCube skybox;
+
 void main()
 {
-    FragColor = vec4(f_col, 1.);
+    float ratio = 1. / 1.52;
+    vec3 I = normalize(f_pos - cam_pos);
+    vec3 R = refract(I, normalize(f_norm), ratio);
+    FragColor = vec4(mix(texture(skybox, R).rgb, f_col, .2), 1.);
 }
 
