@@ -58,6 +58,9 @@ void piece_rotate(struct Piece *p)
         int dz = p->cubes[i]->pos[2] - center[2];
         int dy = p->cubes[i]->pos[1] - center[1];
 
+        dz = -dz;
+        dy = -dy;
+
         cube_move(p->cubes[i], (vec3){
             0.f,
             (dz + center[1]) - p->cubes[i]->pos[1],
