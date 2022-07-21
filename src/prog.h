@@ -16,6 +16,8 @@ struct Prog
 
     struct Board *board;
     struct Skybox *skybox;
+
+    bool rotate;
 };
 
 struct Prog *prog_alloc(GLFWwindow *win);

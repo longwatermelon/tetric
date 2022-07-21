@@ -5,8 +5,6 @@
 
 struct Prog *g_prog;
 
-#define GLFW_REPEAT 2
-
 static void key_callback(GLFWwindow *win, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
@@ -26,6 +24,11 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
         while (board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f }))
             ;
     }
+
+    if (key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+        g_prog->rotate = !g_prog->rotate;
+    }
 }
 
 struct Prog *prog_alloc(GLFWwindow *win)
@@ -43,6 +46,8 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
     p->board = board_alloc();
     p->skybox = skybox_alloc("res/skybox/");
+
+    p->rotate = false;
 
     g_prog = p;
     return p;
@@ -82,7 +87,9 @@ void prog_mainloop(struct Prog *p)
         prev_my = my;
 
         board_update(p->board);
-        prog_rotate_cam(p);
+
+        if (p->rotate)
+            prog_rotate_cam(p);
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
