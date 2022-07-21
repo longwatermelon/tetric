@@ -9,6 +9,7 @@ struct Camera *cam_alloc(vec3 pos, vec3 rot)
     struct Camera *c = malloc(sizeof(struct Camera));
     glm_vec3_dup(pos, c->pos);
     cam_rot(c, rot);
+    glm_vec3_zero(c->shake);
 
     return c;
 }
@@ -48,6 +49,14 @@ void cam_update_vectors(struct Camera *c)
 }
 
 
+void cam_shake(struct Camera *c)
+{
+    c->shake[0] = (float)(rand() % 100 - 50) / 300.f;
+    c->shake[1] = (float)(rand() % 100 - 50) / 300.f;
+    c->shake[2] = (float)(rand() % 100 - 50) / 300.f;
+}
+
+
 void cam_set_props(struct Camera *c, unsigned int shader)
 {
     shader_vec3(shader, "viewPos", c->pos);
@@ -56,6 +65,8 @@ void cam_set_props(struct Camera *c, unsigned int shader)
 
 void cam_view_mat(struct Camera *c, mat4 dest)
 {
-    glm_look(c->pos, c->front, c->up, dest);
+    vec3 pos;
+    glm_vec3_add(c->pos, c->shake, pos);
+    glm_look(pos, c->front, c->up, dest);
 }
 

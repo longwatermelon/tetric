@@ -8,6 +8,8 @@ struct Camera
     vec3 pos, rot;
 
     vec3 front, up, right;
+
+    vec3 shake;
 };
 
 struct Camera *cam_alloc(vec3 pos, vec3 rot);
@@ -15,6 +17,8 @@ void cam_free(struct Camera *c);
 
 void cam_rot(struct Camera *c, vec3 rot);
 void cam_update_vectors(struct Camera *c);
+
+void cam_shake(struct Camera *c);
 
 void cam_set_props(struct Camera *c, unsigned int shader);
 
