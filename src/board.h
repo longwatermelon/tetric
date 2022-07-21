@@ -28,6 +28,11 @@ void board_update(struct Board *b);
 void board_render(struct Board *b, RenderInfo *ri);
 void board_fill_verts(struct Board *b);
 
+// Check when active piece has landed
+bool board_check_collision(struct Board *b);
+// Modify b->layout to # where b->active currently is
+void board_place_active(struct Board *b);
+
 void board_add_piece(struct Board *b, struct Piece *p);
 
 void board_make_borders(struct Board *b);

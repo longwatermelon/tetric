@@ -71,7 +71,7 @@ void board_update(struct Board *b)
     if (!b->active)
     {
         struct Cube **cubes = malloc(sizeof(struct Cube*));
-        cubes[0] = cube_alloc((vec3){ 0.f, 20.f, 5.f }, (vec3){ 1.f, 0.f, 0.f });
+        cubes[0] = cube_alloc((vec3){ 0.f, 19.f, 5.f }, (vec3){ 1.f, 0.f, 0.f });
 
         b->active = piece_alloc(cubes, 1);
         board_add_piece(b, b->active);
@@ -83,6 +83,13 @@ void board_update(struct Board *b)
     {
         b->last_moved = glfwGetTime();
         piece_move(b->active, (vec3){ 0.f, -1.f, 0.f });
+
+        if (board_check_collision(b))
+        {
+            piece_move(b->active, (vec3){ 0.f, 1.f, 0.f });
+            board_place_active(b);
+            b->active = 0;
+        }
     }
 }
 
@@ -117,6 +124,35 @@ void board_fill_verts(struct Board *b)
 
         memcpy(b->verts + index, pverts, sizeof(float) * nverts);
         index += nverts;
+    }
+}
+
+
+bool board_check_collision(struct Board *b)
+{
+    for (size_t i = 0; i < b->active->ncubes; ++i)
+    {
+        struct Cube *c = b->active->cubes[i];
+        int iz = c->pos[2];
+        int iy = 19.f - c->pos[1];
+
+        if (b->layout[iy * 10 + iz] == '#')
+            return true;
+    }
+
+    return false;
+}
+
+
+void board_place_active(struct Board *b)
+{
+    for (size_t i = 0; i < b->active->ncubes; ++i)
+    {
+        struct Cube *c = b->active->cubes[i];
+        int iz = c->pos[2];
+        int iy = 19.f - c->pos[1];
+
+        b->layout[iy * 10 + iz] = '#';
     }
 }
 
