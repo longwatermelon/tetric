@@ -9,6 +9,8 @@
 
 struct Prog
 {
+    bool running;
+
     GLFWwindow *win;
     RenderInfo *ri;
 
@@ -19,6 +21,8 @@ struct Prog
 
     bool rotate;
     bool use_normal_map;
+
+    bool restart;
 };
 
 struct Prog *prog_alloc(GLFWwindow *win);

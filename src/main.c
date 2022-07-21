@@ -19,9 +19,16 @@ int main()
 
     glViewport(0, 0, 1200, 900);
 
-    struct Prog *p = prog_alloc(win);
-    prog_mainloop(p);
-    prog_free(p);
+    while (true)
+    {
+        struct Prog *p = prog_alloc(win);
+        prog_mainloop(p);
+        bool restart = p->restart;
+        prog_free(p);
+
+        if (!restart)
+            break;
+    }
 
     glfwDestroyWindow(win);
     glfwTerminate();

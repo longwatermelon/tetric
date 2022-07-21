@@ -42,11 +42,18 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
     {
         g_prog->use_normal_map = !g_prog->use_normal_map;
     }
+
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+    {
+        g_prog->restart = true;
+        g_prog->running = false;
+    }
 }
 
 struct Prog *prog_alloc(GLFWwindow *win)
 {
     struct Prog *p = malloc(sizeof(struct Prog));
+    p->running = true;
     p->win = win;
 
     p->cam = cam_alloc((vec3){ 0.f, 0.f, 0.f }, (vec3){ 0.f, 0.f, 0.f });
@@ -62,6 +69,8 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
     p->rotate = false;
     p->use_normal_map = true;
+
+    p->restart = false;
 
     g_prog = p;
     return p;
@@ -93,7 +102,7 @@ void prog_mainloop(struct Prog *p)
 
     struct Texture *norm_map = tex_alloc("res/normal.jpg");
 
-    while (!glfwWindowShouldClose(p->win))
+    while (p->running && !glfwWindowShouldClose(p->win))
     {
         double mx, my;
         glfwGetCursorPos(p->win, &mx, &my);
