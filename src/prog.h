@@ -3,6 +3,7 @@
 
 #include "shader.h"
 #include "render.h"
+#include "skybox.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -14,6 +15,7 @@ struct Prog
     struct Camera *cam;
 
     struct Board *board;
+    struct Skybox *skybox;
 };
 
 struct Prog *prog_alloc(GLFWwindow *win);

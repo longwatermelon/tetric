@@ -37,12 +37,12 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
     p->ri = ri_alloc();
     ri_add_shader(p->ri, "shaders/basic_v.glsl", "shaders/basic_f.glsl");
+    ri_add_shader(p->ri, "shaders/skybox_v.glsl", "shaders/skybox_f.glsl");
 
     p->ri->cam = p->cam;
 
-    stbi_set_flip_vertically_on_load(true);
-
     p->board = board_alloc();
+    p->skybox = skybox_alloc("res/skybox/");
 
     g_prog = p;
     return p;
@@ -51,8 +51,10 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
 void prog_free(struct Prog *p)
 {
+    skybox_free(p->skybox);
     board_free(p->board);
     cam_free(p->cam);
+    ri_free(p->ri);
     free(p);
 }
 
@@ -83,6 +85,9 @@ void prog_mainloop(struct Prog *p)
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        ri_use_shader(p->ri, SHADER_SKYBOX);
+        skybox_render(p->skybox, p->ri);
 
         ri_use_shader(p->ri, SHADER_BASIC);
 
