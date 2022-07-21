@@ -1,5 +1,6 @@
 #include "prog.h"
 #include "board.h"
+#include "texture.h"
 #include <stb/stb_image.h>
 #include <stdlib.h>
 
@@ -26,8 +27,13 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
     }
 
     if (key == GLFW_KEY_R && action == GLFW_PRESS)
-    {
         g_prog->rotate = !g_prog->rotate;
+
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    {
+        glm_vec3_zero(g_prog->cam->pos);
+        glm_vec3_zero(g_prog->cam->rot);
+        cam_update_vectors(g_prog->cam);
     }
 }
 
@@ -77,6 +83,8 @@ void prog_mainloop(struct Prog *p)
     double prev_mx, prev_my;
     glfwGetCursorPos(p->win, &prev_mx, &prev_my);
 
+    struct Texture *norm_map = tex_alloc("res/normal.jpg");
+
     while (!glfwWindowShouldClose(p->win))
     {
         double mx, my;
@@ -106,12 +114,21 @@ void prog_mainloop(struct Prog *p)
         shader_mat4(p->ri->shader, "projection", p->ri->proj);
         shader_vec3(p->ri->shader, "cam_pos", p->ri->cam->pos);
 
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, p->skybox->tex);
+        shader_int(p->ri->shader, "skybox", 0);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, norm_map->id);
+        shader_int(p->ri->shader, "norm_map", 1);
+
         board_render(p->board, p->ri);
 
         glfwSwapBuffers(p->win);
         glfwPollEvents();
     }
+
+    tex_free(norm_map);
 }
 
 
