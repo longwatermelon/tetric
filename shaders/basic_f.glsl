@@ -21,6 +21,10 @@ void main()
     {
         vec3 rgb_norm = texture(norm_map, f_tc).rgb;
         norm = normalize(rgb_norm * 2. - 1.);
+
+        /* if (f_norm.x != 0.) norm.x *= f_norm.x; */
+        /* if (f_norm.y != 0.) norm.y *= f_norm.y; */
+        /* if (f_norm.z != 0.) norm.z *= f_norm.z; */
     }
     else
     {
@@ -30,9 +34,9 @@ void main()
     /* vec3 new_pos = f_pos; */
     vec3 new_pos = f_pos + norm;
 
-    vec3 ldir = normalize(vec3(-1., .2, .0));
+    vec3 ldir = normalize(vec3(-1., .0, .0));
     float diff = max(dot(norm, ldir), 0.);
-    vec3 diffuse = 1. * diff * f_col;
+    vec3 diffuse = .6 * diff * f_col;
 
     vec3 view_dir = normalize(cam_pos - new_pos);
     vec3 reflect_dir = reflect(-ldir, norm);
@@ -41,10 +45,10 @@ void main()
 
     vec3 result = ambient + diffuse + specular;
 
-    float ratio = 1. / 1.1;
+    float ratio = 1. / 1.4;
     vec3 I = normalize(new_pos - cam_pos);
-    vec3 R = refract(I, normalize(f_norm), ratio);
+    vec3 R = refract(I, f_norm, ratio);
 
-    FragColor = vec4(mix(texture(skybox, R).rgb, result, .3), 1.);
+    FragColor = vec4(mix(texture(skybox, R).rgb, result, .4), 1.);
 }
 

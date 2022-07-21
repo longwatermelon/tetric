@@ -58,7 +58,7 @@ struct Prog *prog_alloc(GLFWwindow *win)
     p->ri->cam = p->cam;
 
     p->board = board_alloc();
-    p->skybox = skybox_alloc("res/skybox/");
+    p->skybox = skybox_alloc("res/Roundabout/");
 
     p->rotate = false;
     p->use_normal_map = true;

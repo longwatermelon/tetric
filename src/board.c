@@ -343,7 +343,7 @@ struct Piece *board_spawn_piece(struct Board *b)
             { 0.f, 17.f, 4.f }
         };
 
-        vec3 col = { 1.f, 178.f / 255.f, 102.f / 255.f };
+        vec3 col = { 102.f / 255.f, 1.f, 102.f / 255.f };
 
         for (int i = 0; i < 4; ++i)
             cubes[i] = cube_alloc(pos[i], col);
