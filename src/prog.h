@@ -18,6 +18,7 @@ struct Prog
     struct Skybox *skybox;
 
     bool rotate;
+    bool use_normal_map;
 };
 
 struct Prog *prog_alloc(GLFWwindow *win);

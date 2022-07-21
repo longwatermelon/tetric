@@ -35,6 +35,11 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
         glm_vec3_zero(g_prog->cam->rot);
         cam_update_vectors(g_prog->cam);
     }
+
+    if (key == GLFW_KEY_G && action == GLFW_PRESS)
+    {
+        g_prog->use_normal_map = !g_prog->use_normal_map;
+    }
 }
 
 struct Prog *prog_alloc(GLFWwindow *win)
@@ -54,6 +59,7 @@ struct Prog *prog_alloc(GLFWwindow *win)
     p->skybox = skybox_alloc("res/skybox/");
 
     p->rotate = false;
+    p->use_normal_map = true;
 
     g_prog = p;
     return p;
@@ -113,6 +119,7 @@ void prog_mainloop(struct Prog *p)
         shader_mat4(p->ri->shader, "view", p->ri->view);
         shader_mat4(p->ri->shader, "projection", p->ri->proj);
         shader_vec3(p->ri->shader, "cam_pos", p->ri->cam->pos);
+        shader_int(p->ri->shader, "use_normal_map", p->use_normal_map);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, p->skybox->tex);

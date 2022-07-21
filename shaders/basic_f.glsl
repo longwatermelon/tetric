@@ -9,17 +9,28 @@ in vec2 f_tc;
 uniform vec3 cam_pos;
 uniform samplerCube skybox;
 uniform sampler2D norm_map;
+uniform bool use_normal_map;
 
 void main()
 {
     vec3 ambient = .2 * f_col;
 
-    vec3 rgb_norm = texture(norm_map, f_tc).rgb;
-    vec3 norm = normalize(rgb_norm * 2. - 1.);
-    /* vec3 norm = normalize(f_norm + texture(norm_map, f_tc).rgb * 100.); */
+    vec3 norm;
+
+    if (use_normal_map)
+    {
+        vec3 rgb_norm = texture(norm_map, f_tc).rgb;
+        norm = normalize(rgb_norm * 2. - 1.);
+    }
+    else
+    {
+        norm = normalize(f_norm);
+    }
+
+    /* vec3 new_pos = f_pos; */
     vec3 new_pos = f_pos + norm;
 
-    vec3 ldir = normalize(vec3(-1., .0, .0));
+    vec3 ldir = normalize(vec3(-1., .2, .0));
     float diff = max(dot(norm, ldir), 0.);
     vec3 diffuse = .7 * diff * f_col;
 
