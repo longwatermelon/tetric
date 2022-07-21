@@ -23,6 +23,8 @@ struct Prog
     bool use_normal_map;
 
     bool restart;
+
+    float last_shake;
 };
 
 struct Prog *prog_alloc(GLFWwindow *win);

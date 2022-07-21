@@ -26,6 +26,7 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
             ;
 
         g_prog->board->last_moved = glfwGetTime() - .5f;
+        g_prog->last_shake = glfwGetTime();
     }
 
     if (key == GLFW_KEY_R && action == GLFW_PRESS)
@@ -77,6 +78,8 @@ struct Prog *prog_alloc(GLFWwindow *win)
 
     p->restart = false;
 
+    p->last_shake = -100.f;
+
     g_prog = p;
     return p;
 }
@@ -120,6 +123,11 @@ void prog_mainloop(struct Prog *p)
 
         if (p->rotate)
             prog_rotate_cam(p);
+
+        if (glfwGetTime() - p->last_shake < .05f)
+            cam_shake(p->cam);
+        else
+            glm_vec3_zero(p->cam->shake);
 
         glClearColor(0.f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
