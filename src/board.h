@@ -37,6 +37,7 @@ void board_move_active(struct Board *b, vec3 dir);
 void board_clear_full_lines(struct Board *b);
 
 void board_add_piece(struct Board *b, struct Piece *p);
+struct Piece *board_spawn_piece(struct Board *b);
 
 void board_make_borders(struct Board *b);
 

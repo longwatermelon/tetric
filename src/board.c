@@ -69,12 +69,7 @@ void board_update(struct Board *b)
 {
     if (!b->active)
     {
-        struct Cube **cubes = malloc(sizeof(struct Cube*));
-        cubes[0] = cube_alloc((vec3){ 0.f, 19.f, 5.f }, (vec3){ 1.f, 0.f, 0.f });
-
-        b->active = piece_alloc(cubes, 1);
-        board_add_piece(b, b->active);
-
+        b->active = board_spawn_piece(b);
         b->last_moved = glfwGetTime();
     }
 
@@ -229,7 +224,16 @@ void board_clear_full_lines(struct Board *b)
     {
         // Start from i = 1 to ignore border pieces
         for (size_t i = 1; i < b->npieces; ++i)
-            piece_move(b->pieces[i], (vec3){ 0.f, -1.f * cleared, 0.f });
+        {
+            for (size_t j = 0; j < b->pieces[i]->ncubes; ++j)
+            {
+                struct Cube *c = b->pieces[i]->cubes[j];
+
+                if (c->pos[1] > 19.f - lowest)
+                    cube_move(c, (vec3){ 0.f, -1.f * cleared, 0.f });
+            }
+            /* piece_move(b->pieces[i], (vec3){ 0.f, -1.f * cleared, 0.f }); */
+        }
 
         for (int i = lowest - 1; i >= 0; --i)
         {
@@ -265,6 +269,21 @@ void board_add_piece(struct Board *b, struct Piece *p)
     glBindBuffer(GL_ARRAY_BUFFER, b->vb);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * b->nverts, 0, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+
+struct Piece *board_spawn_piece(struct Board *b)
+{
+    struct Cube **cubes = malloc(sizeof(struct Cube*) * 4);
+    cubes[0] = cube_alloc((vec3){ 0.f, 19.f, 5.f }, (vec3){ 1.f, 1.f, 0.f });
+    cubes[1] = cube_alloc((vec3){ 0.f, 18.f, 5.f }, (vec3){ 1.f, 1.f, 0.f });
+    cubes[2] = cube_alloc((vec3){ 0.f, 17.f, 5.f }, (vec3){ 1.f, 1.f, 0.f });
+    cubes[3] = cube_alloc((vec3){ 0.f, 17.f, 6.f }, (vec3){ 1.f, 1.f, 0.f });
+
+    struct Piece *p = piece_alloc(cubes, 4);
+    board_add_piece(b, p);
+
+    return p;
 }
 
 
