@@ -35,6 +35,25 @@ void piece_move(struct Piece *p, vec3 dir)
 }
 
 
+void piece_rotate(struct Piece *p)
+{
+    vec3 center;
+    glm_vec3_copy(p->cubes[1]->pos, center);
+
+    for (size_t i = 0; i < p->ncubes; ++i)
+    {
+        int dz = p->cubes[i]->pos[2] - center[2];
+        int dy = p->cubes[i]->pos[1] - center[1];
+
+        cube_move(p->cubes[i], (vec3){
+            0.f,
+            (dz + center[1]) - p->cubes[i]->pos[1],
+            (-dy + center[2]) - p->cubes[i]->pos[2],
+        });
+    }
+}
+
+
 float *piece_verts(struct Piece *p, size_t *len)
 {
     size_t index = 0;

@@ -18,6 +18,8 @@ struct Piece *piece_alloc(struct Cube **cubes, size_t ncubes);
 void piece_free(struct Piece *p);
 
 void piece_move(struct Piece *p, vec3 dir);
+void piece_rotate(struct Piece *p);
+
 float *piece_verts(struct Piece *p, size_t *len);
 
 #endif
