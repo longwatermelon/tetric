@@ -8,51 +8,54 @@ struct Prog *g_prog;
 
 static void key_callback(GLFWwindow *win, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-        board_move_active(g_prog->board, (vec3){ 0.f, 0.f, -1.f });
-
-    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-        board_move_active(g_prog->board, (vec3){ 0.f, 0.f, 1.f });
-
-    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-        board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f });
-
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS && g_prog->board->active)
-        piece_rotate(g_prog->board->active);
-
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    if (action == GLFW_PRESS || action == GLFW_REPEAT)
     {
-        while (board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f }))
-            ;
+        if (key == GLFW_KEY_LEFT)
+            board_move_active(g_prog->board, (vec3){ 0.f, 0.f, -1.f });
 
-        g_prog->board->last_moved = glfwGetTime() - .5f;
-        g_prog->last_shake = glfwGetTime();
-    }
+        if (key == GLFW_KEY_RIGHT)
+            board_move_active(g_prog->board, (vec3){ 0.f, 0.f, 1.f });
 
-    if (key == GLFW_KEY_R && action == GLFW_PRESS)
-        g_prog->rotate = !g_prog->rotate;
+        if (key == GLFW_KEY_DOWN)
+            board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f });
 
-    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
-    {
-        glm_vec3_zero(g_prog->cam->pos);
-        glm_vec3_zero(g_prog->cam->rot);
-        cam_update_vectors(g_prog->cam);
-    }
+        if (key == GLFW_KEY_UP && g_prog->board->active)
+            piece_rotate(g_prog->board->active);
 
-    if (key == GLFW_KEY_G && action == GLFW_PRESS)
-    {
-        g_prog->use_normal_map = !g_prog->use_normal_map;
-    }
+        if (key == GLFW_KEY_SPACE)
+        {
+            while (board_move_active(g_prog->board, (vec3){ 0.f, -1.f, 0.f }))
+                ;
 
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-    {
-        g_prog->restart = true;
-        g_prog->running = false;
-    }
+            g_prog->board->last_moved = glfwGetTime() - .5f;
+            g_prog->last_shake = glfwGetTime();
+        }
 
-    if (key == GLFW_KEY_C && action == GLFW_PRESS)
-    {
-        board_swap_hold(g_prog->board);
+        if (key == GLFW_KEY_R)
+            g_prog->rotate = !g_prog->rotate;
+
+        if (key == GLFW_KEY_1)
+        {
+            glm_vec3_zero(g_prog->cam->pos);
+            glm_vec3_zero(g_prog->cam->rot);
+            cam_update_vectors(g_prog->cam);
+        }
+
+        if (key == GLFW_KEY_G)
+        {
+            g_prog->use_normal_map = !g_prog->use_normal_map;
+        }
+
+        if (key == GLFW_KEY_Q)
+        {
+            g_prog->restart = true;
+            g_prog->running = false;
+        }
+
+        if (key == GLFW_KEY_C)
+        {
+            board_swap_hold(g_prog->board);
+        }
     }
 }
 
