@@ -454,13 +454,13 @@ void board_make_borders(struct Board *b)
         cubes[index++] = cube_alloc((vec3){ 0.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
     }
 
-    for (size_t i = 0; i < 12 * 20; ++i)
-    {
-        if (i % 12 == 0) putchar('\n');
-        putchar(b->layout[i]);
-    }
+    /* for (size_t i = 0; i < 12 * 20; ++i) */
+    /* { */
+    /*     if (i % 12 == 0) putchar('\n'); */
+    /*     putchar(b->layout[i]); */
+    /* } */
 
-    putchar('\n');
+    /* putchar('\n'); */
 
     struct Piece *p = piece_alloc(cubes, ncubes);
     board_add_piece(b, p);
