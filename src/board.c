@@ -50,6 +50,8 @@ struct Board *board_alloc()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    b->next_piece = rand() % 7;
+
     board_make_borders(b);
 
     return b;
@@ -80,6 +82,7 @@ void board_update(struct Board *b)
     {
         b->active = board_spawn_piece(b);
         b->last_moved = glfwGetTime();
+        b->next_piece = rand() % 7;
     }
 
     if (glfwGetTime() - b->last_moved > .5f)
@@ -294,7 +297,7 @@ void board_add_piece(struct Board *b, struct Piece *p)
 
 struct Piece *board_spawn_piece(struct Board *b)
 {
-    int type = rand() % 7;
+    int type = b->next_piece;
     struct Cube **cubes = malloc(sizeof(struct Cube*) * 4);
 
     switch (type)

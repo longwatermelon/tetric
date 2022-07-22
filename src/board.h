@@ -21,6 +21,8 @@ struct Board
     unsigned int vao, vb;
 
     bool can_hold;
+
+    int next_piece;
 };
 
 struct Board *board_alloc();

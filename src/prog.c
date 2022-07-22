@@ -34,12 +34,14 @@ static void key_callback(GLFWwindow *win, int key, int scancode, int action, int
         if (key == GLFW_KEY_R)
             g_prog->rotate = !g_prog->rotate;
 
-        if (key == GLFW_KEY_1)
+        if (key == GLFW_KEY_0)
         {
             glm_vec3_zero(g_prog->cam->pos);
             glm_vec3_zero(g_prog->cam->rot);
             cam_update_vectors(g_prog->cam);
         }
+
+        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_7) g_prog->board->next_piece = key - GLFW_KEY_1;
 
         if (key == GLFW_KEY_G)
         {
