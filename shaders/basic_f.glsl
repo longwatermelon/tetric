@@ -32,19 +32,19 @@ void main()
 
     vec3 ldir = normalize(vec3(-1., .0, .0));
     float diff = max(dot(norm, ldir), 0.);
-    vec3 diffuse = .5 * diff * f_col;
+    vec3 diffuse = .6 * diff * f_col;
 
     vec3 view_dir = normalize(cam_pos - new_pos);
     vec3 reflect_dir = reflect(-ldir, norm);
     float spec = pow(max(dot(view_dir, reflect_dir), 0.), 100.f);
-    vec3 specular = .5 * spec * f_col;
+    vec3 specular = .6 * spec * f_col;
 
     vec3 result = ambient + diffuse + specular;
 
     float ratio = 1. / 1.4;
     vec3 I = normalize(new_pos - cam_pos);
-    vec3 R = refract(I, f_norm, ratio);
+    vec3 R = refract(I, mix(f_norm, norm, .2), ratio);
 
-    FragColor = vec4(mix(texture(skybox, R).rgb, result, .4), 1.);
+    FragColor = vec4(mix(texture(skybox, R).rgb, result, .5), 1.);
 }
 
