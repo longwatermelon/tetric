@@ -8,10 +8,10 @@
 struct Board *board_alloc()
 {
     struct Board *b = malloc(sizeof(struct Board));
-    b->layout = calloc(10 * 20 + 1, sizeof(char));
+    b->layout = calloc(12 * 20 + 1, sizeof(char));
 
     for (size_t i = 0; i < 20; ++i)
-        strcat(b->layout, "..........");
+        strcat(b->layout, "............");
 
     b->pieces = 0;
     b->npieces = 0;
@@ -147,7 +147,7 @@ bool board_check_collision(struct Board *b)
         int iz = c->pos[2];
         int iy = 19.f - c->pos[1];
 
-        if (b->layout[iy * 10 + iz] == '#')
+        if (b->layout[iy * 12 + iz] == '#')
             return true;
     }
 
@@ -163,7 +163,7 @@ void board_place_active(struct Board *b)
         int iz = c->pos[2];
         int iy = 19.f - c->pos[1];
 
-        b->layout[iy * 10 + iz] = '#';
+        b->layout[iy * 12 + iz] = '#';
     }
 }
 
@@ -195,10 +195,10 @@ void board_clear_full_lines(struct Board *b)
 
     for (size_t i = 0; i < 19; ++i)
     {
-        size_t begin = i * 10;
+        size_t begin = i * 12;
         bool full = true;
 
-        for (size_t z = begin + 1; z <= begin + 8; ++z)
+        for (size_t z = begin + 1; z <= begin + 10; ++z)
         {
             if (b->layout[z] != '#')
             {
@@ -212,7 +212,7 @@ void board_clear_full_lines(struct Board *b)
             ++cleared;
             int iy = i;
 
-            for (size_t z = begin + 1; z <= begin + 8; ++z)
+            for (size_t z = begin + 1; z <= begin + 10; ++z)
             {
                 int iz = z - begin;
 
@@ -257,14 +257,14 @@ void board_clear_full_lines(struct Board *b)
 
         for (int i = lowest - 1; i >= 0; --i)
         {
-            for (size_t z = 1; z <= 8; ++z)
+            for (size_t z = 1; z <= 10; ++z)
             {
-                if (b->layout[i * 10 + z] == '#')
+                if (b->layout[i * 12 + z] == '#')
                 {
-                    b->layout[i * 10 + z] = '.';
+                    b->layout[i * 12 + z] = '.';
                     // @ indicates newly moved piece so it doesn't get
                     // cleared by another piece moving out of that position
-                    b->layout[i * 10 + 10 * cleared + z] = '@';
+                    b->layout[i * 12 + 12 * cleared + z] = '@';
                 }
             }
         }
@@ -435,32 +435,32 @@ void board_swap_hold(struct Board *b)
 
 void board_make_borders(struct Board *b)
 {
-    size_t ncubes = 8 + 20 * 2;
+    size_t ncubes = 10 + 20 * 2;
     struct Cube **cubes = malloc(sizeof(struct Cube*) * ncubes);
     size_t index = 0;
 
     for (size_t i = 0; i < 20; ++i)
     {
-        b->layout[i * 10] = '#';
+        b->layout[i * 12] = '#';
         cubes[index++] = cube_alloc((vec3){ 0.f, i, 0.f }, (vec3){ 1.f, 1.f, 1.f });
 
-        b->layout[i * 10 + 9] = '#';
-        cubes[index++] = cube_alloc((vec3){ 0.f, i, 9.f }, (vec3){ 1.f, 1.f, 1.f });
+        b->layout[i * 12 + 11] = '#';
+        cubes[index++] = cube_alloc((vec3){ 0.f, i, 11.f }, (vec3){ 1.f, 1.f, 1.f });
     }
 
-    for (size_t i = 0; i < 8; ++i)
+    for (size_t i = 0; i < 10; ++i)
     {
-        b->layout[((10 * 20 - 1) - 10) + (i + 2)] = '#';
+        b->layout[((12 * 20 - 1) - 12) + (i + 2)] = '#';
         cubes[index++] = cube_alloc((vec3){ 0.f, 0.f, i + 1 }, (vec3){ 1.f, 1.f, 1.f });
     }
 
-    /* for (size_t i = 0; i < 10 * 20; ++i) */
-    /* { */
-    /*     if (i % 10 == 0) putchar('\n'); */
-    /*     putchar(b->layout[i]); */
-    /* } */
+    for (size_t i = 0; i < 12 * 20; ++i)
+    {
+        if (i % 12 == 0) putchar('\n');
+        putchar(b->layout[i]);
+    }
 
-    /* putchar('\n'); */
+    putchar('\n');
 
     struct Piece *p = piece_alloc(cubes, ncubes);
     board_add_piece(b, p);
