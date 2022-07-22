@@ -11,7 +11,7 @@ RenderInfo *ri_alloc()
 
     ri->cam = 0;
 
-    glm_perspective(glm_rad(45.f), 800.f / 600.f, .1f, 1000.f, ri->proj);
+    glm_perspective(glm_rad(45.f), 1200.f / 900.f, .1f, 1000.f, ri->proj);
     glm_mat4_identity(ri->view);
 
     return ri;
