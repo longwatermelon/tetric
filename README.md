@@ -23,3 +23,7 @@ make
 * g: toggle normal mapping
 * r: rotate around board
 * q: restart
+
+
+https://user-images.githubusercontent.com/73869536/180364629-740409ea-734a-4781-bbb1-3aaa10416db3.mp4
+
