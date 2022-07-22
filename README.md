@@ -22,3 +22,4 @@ make
 * c: hold
 * g: toggle normal mapping
 * r: rotate around board
+* q: restart
