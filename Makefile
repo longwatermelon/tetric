@@ -14,7 +14,7 @@ target: $(OBJS)
 	$(CC) $(CFLAGS) $(INC) $^ $(LIBS)
 
 obj/src/%.o: src/%.c
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@ $(LIBS)
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 deps: deps/*
 	cd deps/cglm && cmake . -DCGLM_STATIC=ON && make && mv libcglm.a ..
