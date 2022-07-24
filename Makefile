@@ -10,7 +10,7 @@ OBJS=$(addprefix obj/, $(SRC:.c=.o))
 
 # glfw required frameworks on macos
 ifeq ($(UNAME_S), Darwin)
-	LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
+	LIBS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
 endif
 
 all:
