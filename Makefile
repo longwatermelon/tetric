@@ -23,7 +23,7 @@ target: $(OBJS)
 obj/src/%.o: src/%.c
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-deps: deps/*
+deps:
 	cd deps/cglm && cmake . -DCGLM_STATIC=ON && make && mv libcglm.a ..
 	cd deps/glad && $(CC) -c src/glad.c -Iinclude && ar rc ../libglad.a glad.o
 	cd deps/glfw && cmake . && make && mv src/libglfw3.a ../libglfw.a
