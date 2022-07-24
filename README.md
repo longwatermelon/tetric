@@ -4,7 +4,7 @@ Tetris with better graphics
 # Building
 Requires cmake
 
-Probably will work on linux, support is iffy on macOS, definitely won't work on windows.
+Probably will work on linux and macos, definitely won't work on windows.
 
 ```
 git clone --recurse-submodules https://github.com/longwatermelon/tetric
