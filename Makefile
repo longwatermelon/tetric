@@ -6,6 +6,8 @@ LIBS=-Ldeps -lglfw -lcglm -lm -lglad -lstb_image
 SRC=$(wildcard src/*.c)
 OBJS=$(addprefix obj/, $(SRC:.c=.o))
 
+.PHONY: deps
+
 # glfw required frameworks on macos
 ifeq ($(UNAME_S), Darwin)
 	LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
