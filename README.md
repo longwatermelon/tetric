@@ -26,6 +26,4 @@ make
 * 1-7: select next piece
 * 0: return to default view
 
-
-https://user-images.githubusercontent.com/73869536/180364629-740409ea-734a-4781-bbb1-3aaa10416db3.mp4
-
+https://user-images.githubusercontent.com/73869536/181371570-d885fcfc-8c1b-4597-9b92-d4e5d0e70209.mp4
