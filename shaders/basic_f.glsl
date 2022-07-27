@@ -21,6 +21,18 @@ void main()
     {
         vec3 rgb_norm = texture(norm_map, f_tc).rgb;
         norm = normalize(rgb_norm * 2. - 1.);
+
+        if (abs(f_norm.x) > .5) norm.x *= -sign(f_norm.x);
+        if (abs(f_norm.z) > .5) norm.z *= -sign(f_norm.z);
+
+        if (abs(f_norm.y) > .5)
+        {
+            float tmp = norm.y;
+            norm.y = norm.x;
+            norm.x = norm.y;
+
+            norm.y *= -sign(f_norm.y);
+        }
     }
     else
     {
@@ -32,7 +44,7 @@ void main()
 
     vec3 ldir = normalize(vec3(-1., .0, .0));
     float diff = max(dot(norm, ldir), 0.);
-    vec3 diffuse = .6 * diff * f_col;
+    vec3 diffuse = .7 * diff * f_col;
 
     vec3 view_dir = normalize(cam_pos - new_pos);
     vec3 reflect_dir = reflect(-ldir, norm);
